@@ -69,7 +69,7 @@ struct RepoInfo: View {
   }
   
   func handleShowLoadMore() -> some View {
-    if issues.count > 0 {
+    if issues.count > 0 && issues.count != repository.open_issues_count {
       return AnyView(
         Button {
           if !isLoading {

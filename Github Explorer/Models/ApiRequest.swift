@@ -19,17 +19,17 @@ class Api {
       }
       
       guard let responseCode = response as? HTTPURLResponse else {
-        typeErro("Resposta vazia.")
+        typeErro("Empty answer.")
         return
       }
       
       if responseCode.statusCode == 404 {
-        typeErro("Repositório não encontrado")
+        typeErro("Repository not found.")
         return
       }
       
       guard let data = data else {
-        typeErro("Dados vazios.")
+        typeErro("Empty data.")
         return
       }
 

@@ -20,7 +20,8 @@ struct RepositoriesList: View {
   var body: some View {
     NavigationView {
       VStack {
-        TextField("Digite o nome do repositório...", text: $repositoryName)
+        TextField("Text the repository name...", text: $repositoryName)
+          .autocapitalization(.none)
           .padding(10)
           .font(Font.system(size: 20, weight: .medium, design: .rounded))
           .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
@@ -73,7 +74,7 @@ struct RepositoriesList: View {
     }
     
     return AnyView(
-      Text("Pesquisar")
+      Text("Search")
         .frame(width: 300, height: 50, alignment: .center)
         .background(Color.green)
         .foregroundColor(.white)
@@ -100,8 +101,8 @@ struct RepositoriesList: View {
     
     if repositoryName == "" {
       showingAlert = true
-      AlertText = "Por favor, preencha o campo."
-      AlertTitle = "Atenção"
+      AlertText = "Please, do not search with the text field empty."
+      AlertTitle = "Attention!"
       
       isLoading = false
       return
@@ -111,7 +112,7 @@ struct RepositoriesList: View {
       if case .success(let repoData) = repository {
         if (repositories.first(where: {$0.id == repoData.id}) != nil) {
           showingAlert = true
-          AlertText = "Esse repositório já foi adicionado a lista."
+          AlertText = "This repository has already been added to the list."
           AlertTitle = "Ops"
           
           isLoading = false
@@ -121,13 +122,13 @@ struct RepositoriesList: View {
         self.repositories.append(repoData)
       } else {
         showingAlert = true
-        AlertText = "Ocorreu um erro ao consultar o GitHub, tente novamente."
-        AlertTitle = "Erro"
+        AlertText = "There was a problem consulting GitHub, try again later."
+        AlertTitle = "Error"
       }
     } typeErro: { erro in
       showingAlert = true
       AlertText = erro
-      AlertTitle = "Erro"
+      AlertTitle = "Error"
     }
     
     isLoading = false
