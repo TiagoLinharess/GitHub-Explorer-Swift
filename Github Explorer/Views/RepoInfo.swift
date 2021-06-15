@@ -27,7 +27,7 @@ struct RepoInfo: View {
           .background(
             Image("background")
               .frame(width: 650, height: 650, alignment: .top)
-              .offset(x: -60, y: 30)
+              .offset(x: -60, y: 130)
               .opacity(0.1)
           )
         
