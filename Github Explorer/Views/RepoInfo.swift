@@ -12,6 +12,7 @@ struct RepoInfo: View {
   
   @State private var issues: [Issue] = []
   @State private var isLoading = true
+  @State private var actualPage = 1
   
   @State private var showingAlert = false
   @State private var AlertTitle = ""
@@ -56,14 +57,32 @@ struct RepoInfo: View {
           }.padding()
           
           handleShowIssues()
+          handleShowLoadMore()
         }
       }
       Spacer()
     }
-    .onAppear(perform: handleLoadIssues)
+    .onAppear{handleLoadIssues(page: actualPage)}
     .alert(isPresented: $showingAlert) {
       Alert(title: Text(AlertTitle), message: Text(AlertText), dismissButton: .default(Text("OK")))
     }
+  }
+  
+  func handleShowLoadMore() -> some View {
+    if issues.count > 0 {
+      return AnyView(
+        Button {
+          if !isLoading {
+            handleLoadIssues(page: actualPage)
+          }
+        } label: {
+          Text("Load more")
+            .padding()
+        }
+      )
+    }
+    
+    return AnyView(Text(""))
   }
   
   func handleShowIssues() -> some View {
@@ -82,8 +101,10 @@ struct RepoInfo: View {
     return AnyView(IssuesList(issues: issues))
   }
   
-  func handleLoadIssues() {
-    IssueApi().getIssues(repository.full_name + "/issues") { newIssues in
+  func handleLoadIssues(page: Int) {
+    let query = repository.full_name + "/issues?page=\(page)"
+    
+    IssueApi().getIssues(query) { newIssues in
       if case .success(let repoIssues) = newIssues {
         self.issues.append(contentsOf: repoIssues)
       } else {
@@ -98,6 +119,7 @@ struct RepoInfo: View {
     }
     
     isLoading = false
+    actualPage += 1
   }
 }
 
