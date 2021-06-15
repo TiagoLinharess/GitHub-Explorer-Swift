@@ -12,17 +12,19 @@ struct RepositoryList: View {
   
   var body: some View {
     ForEach(0 ..< repositories.count, id: \.self) { index in
-      VStack {
-        RemoteImage(url: repositories[index].owner.avatar_url)
-          .aspectRatio(contentMode: .fit)
-          .clipShape(Circle())
-        
-        Text(repositories[index].name)
+      NavigationLink(destination: RepoInfo(repository: repositories[index])) {
+        VStack {
+          RemoteImage(url: repositories[index].owner.avatar_url)
+            .aspectRatio(contentMode: .fit)
+            .clipShape(Circle())
+          
+          Text(repositories[index].name)
+        }
+        .padding()
+        .frame(width: 300, height: 150, alignment: .center)
+        .background(Color.init(hex: "EBEDEF"))
+        .clipShape(RoundedRectangle(cornerRadius: 25.0))
       }
-      .padding()
-      .frame(width: 300, height: 150, alignment: .center)
-      .background(Color.init(hex: "EBEDEF"))
-      .clipShape(RoundedRectangle(cornerRadius: 25.0))
     }
   }
 }

@@ -28,7 +28,7 @@ struct RepositoriesList: View {
           .background(
             Image("background")
               .frame(width: 650, height: 650, alignment: .top)
-              .offset(x: -60, y: 150)
+              .offset(x: 60, y: 180)
               .opacity(0.1)
               .toolbar {
                 ToolbarItem(placement: .primaryAction) {
