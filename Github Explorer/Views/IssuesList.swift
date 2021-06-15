@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import SafariServices
 
 struct IssuesList: View {
   let issues: [Issue]
+  @State var showSafari = false
+  @State var indexToSafari = 0
   
   var body: some View {
     ForEach(0 ..< issues.count, id: \.self) { index in
@@ -22,10 +25,28 @@ struct IssuesList: View {
         
         Spacer()
       }
+      .onTapGesture {
+        indexToSafari = index
+        showSafari = true
+      }
+      .sheet(isPresented: $showSafari) {
+        SafariView(url:URL(string: issues[indexToSafari].html_url)!)
+      }
       .padding()
       .frame(width: 300, height: 80, alignment: .center)
       .background(Color.init(hex: "EBEDEF"))
     }
+  }
+}
+
+struct SafariView: UIViewControllerRepresentable {
+  let url: URL
+
+  func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
+    return SFSafariViewController(url: url)
+  }
+  
+  func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {
   }
 }
 
