@@ -10,13 +10,13 @@ import SwiftUI
 class Issue: Codable {
   let id: Int
   let title: String
-  let url: String
+  let html_url: String
   let user: Owner
   
-  init(title: String, url: String, user: Owner, id: Int) {
+  init(title: String, html_url: String, user: Owner, id: Int) {
     self.id = id
     self.title = title
-    self.url = url
+    self.html_url = html_url
     self.user = user
   }
 }
