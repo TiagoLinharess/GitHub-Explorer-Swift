@@ -8,7 +8,7 @@
 import SwiftUI
 
 class Api {
-  func getPosts(_ repository: String, completion: @escaping (Result<Repository, Error>) -> (), typeErro: @escaping (String) -> ()) {
+  func callRepository(_ repository: String, completion: @escaping (Result<Repository, Error>) -> (), typeErro: @escaping (String) -> ()) {
     guard let url = URL(string: "https://api.github.com/repos/\(repository)") else {return}
 
     URLSession.shared.dataTask(with: url) {data, response, error in
