@@ -8,14 +8,8 @@
 import SwiftUI
 
 struct RepositoriesList: View {
-  @AppStorage("repositories") var repositories: [Repository] = []
-  
+  @ObservedObject var repositoryViewModel: RepositoryApiViewModel
   @State private var repositoryName = ""
-  @State private var isLoading = false
-  
-  @State private var showingAlert = false
-  @State private var AlertTitle = ""
-  @State private var AlertText = ""
   
   var body: some View {
     NavigationView {
@@ -40,9 +34,7 @@ struct RepositoriesList: View {
           )
         
         Button {
-          if !isLoading {
-            getRepository()
-          }
+          searchAction()
         } label: {
           buttonLabel()
         }
@@ -52,91 +44,52 @@ struct RepositoriesList: View {
         ScrollView {
           renderRepositories()
         }
-        
-        Spacer()
       }
       .ignoresSafeArea(.keyboard, edges: .bottom)
     }
-    .alert(isPresented: $showingAlert) {
-      Alert(title: Text(AlertTitle), message: Text(AlertText), dismissButton: .default(Text("OK")))
+    .alert(isPresented: $repositoryViewModel.showingAlert) {
+      Alert(
+        title: Text(repositoryViewModel.alertTitle),
+        message: Text(repositoryViewModel.alertText),
+        dismissButton: .default(Text("OK"))
+      )
     }
   }
   
-  func buttonLabel() -> some View {
-    if isLoading {
-      return AnyView(
+  @ViewBuilder func buttonLabel() -> some View {
+    if repositoryViewModel.isLoading {
         ProgressView()
           .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
           .frame(width: 300, height: 50, alignment: .center)
           .background(Color.green)
           .clipShape(RoundedRectangle(cornerRadius: 10))
-      )
+    } else {
+       Text("Search")
+         .frame(width: 300, height: 50, alignment: .center)
+         .background(Color.green)
+         .foregroundColor(.white)
+         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
-    
-    return AnyView(
-      Text("Search")
-        .frame(width: 300, height: 50, alignment: .center)
-        .background(Color.green)
-        .foregroundColor(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-    )
   }
   
-  func renderRepositories() -> some View {
-    if repositories.count > 0 {
-      let view = AnyView(
-        RepositoryList(repositories: repositories)
-      )
-      
-      return view
+  @ViewBuilder func renderRepositories() -> some View {
+    if repositoryViewModel.repositoriesCount > 0 {
+      RepositoryList(repositories: repositoryViewModel.repositories)
     }
-    
-    let view = AnyView(Text(""))
-    
-    return view
   }
   
-  func getRepository() {
-    isLoading = true
-    
-    if repositoryName == "" {
-      showingAlert = true
-      AlertText = "Please, do not search with the text field empty."
-      AlertTitle = "Attention!"
-      
-      isLoading = false
-      return
+  func searchAction() {
+    if !repositoryViewModel.isLoading {
+      repositoryViewModel.callApi(repositoryName)
     }
-    
-    Api().getPosts(repositoryName) { repository in
-      if case .success(let repoData) = repository {
-        if (repositories.first(where: {$0.id == repoData.id}) != nil) {
-          showingAlert = true
-          AlertText = "This repository has already been added to the list."
-          AlertTitle = "Ops"
-          
-          isLoading = false
-          return
-        }
-        
-        self.repositories.append(repoData)
-      } else {
-        showingAlert = true
-        AlertText = "There was a problem consulting GitHub, try again later."
-        AlertTitle = "Error"
-      }
-    } typeErro: { erro in
-      showingAlert = true
-      AlertText = erro
-      AlertTitle = "Error"
-    }
-    
-    isLoading = false
   }
 }
 
 struct RepositoriesList_Previews: PreviewProvider {
   static var previews: some View {
-    RepositoriesList()
+    Group {
+      RepositoriesList(repositoryViewModel: RepositoryApiViewModel())
+      RepositoriesList(repositoryViewModel: RepositoryApiViewModel())
+    }
   }
 }

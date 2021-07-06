@@ -12,7 +12,7 @@ struct RepositoryList: View {
   
   var body: some View {
     ForEach(0 ..< repositories.count, id: \.self) { index in
-      NavigationLink(destination: RepoInfo(repository: repositories[index])) {
+      NavigationLink(destination: RepoInfo(repository: repositories[index], repoInfoViewModel: RepoInfoViewModel())) {
         VStack {
           RemoteImage(url: repositories[index].owner.avatar_url)
             .aspectRatio(contentMode: .fit)

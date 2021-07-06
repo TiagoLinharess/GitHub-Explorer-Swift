@@ -19,9 +19,11 @@
 		F92F3E9B2674E0BE0045AB73 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F92F3E9A2674E0BE0045AB73 /* Preview Assets.xcassets */; };
 		F9621A422676AA9B00D4DE6F /* AppStorageArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9621A412676AA9B00D4DE6F /* AppStorageArrayExtension.swift */; };
 		F9621A442676B33600D4DE6F /* RepositoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9621A432676B33600D4DE6F /* RepositoryList.swift */; };
+		F96951F22681F3F300A2236F /* RepositoryApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96951F12681F3F300A2236F /* RepositoryApiViewModel.swift */; };
 		F99B8544267820C10044F5BA /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B8543267820C10044F5BA /* Issue.swift */; };
 		F99B8546267828FA0044F5BA /* IssuesApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B8545267828FA0044F5BA /* IssuesApiRequest.swift */; };
 		F99B854826782E4F0044F5BA /* IssuesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99B854726782E4F0044F5BA /* IssuesList.swift */; };
+		F9B73BBD26950916008389E8 /* RepoInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B73BBC26950916008389E8 /* RepoInfoViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,9 +41,11 @@
 		F92F3E9C2674E0BE0045AB73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9621A412676AA9B00D4DE6F /* AppStorageArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageArrayExtension.swift; sourceTree = "<group>"; };
 		F9621A432676B33600D4DE6F /* RepositoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryList.swift; sourceTree = "<group>"; };
+		F96951F12681F3F300A2236F /* RepositoryApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryApiViewModel.swift; sourceTree = "<group>"; };
 		F99B8543267820C10044F5BA /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		F99B8545267828FA0044F5BA /* IssuesApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesApiRequest.swift; sourceTree = "<group>"; };
 		F99B854726782E4F0044F5BA /* IssuesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesList.swift; sourceTree = "<group>"; };
+		F9B73BBC26950916008389E8 /* RepoInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoInfoViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,7 @@
 		F92F3E922674E0BC0045AB73 /* Github Explorer */ = {
 			isa = PBXGroup;
 			children = (
+				F96951F02681F3B600A2236F /* ViewModels */,
 				F92F3EA4267502320045AB73 /* Models */,
 				F92F3EA32674E3AC0045AB73 /* Views */,
 				F92F3EA22674E3710045AB73 /* Assets */,
@@ -124,6 +129,15 @@
 				F9621A412676AA9B00D4DE6F /* AppStorageArrayExtension.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		F96951F02681F3B600A2236F /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				F96951F12681F3F300A2236F /* RepositoryApiViewModel.swift */,
+				F9B73BBC26950916008389E8 /* RepoInfoViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,6 +214,8 @@
 				F92F3E962674E0BC0045AB73 /* ContentView.swift in Sources */,
 				F92F3E942674E0BC0045AB73 /* Github_ExplorerApp.swift in Sources */,
 				F914F58D26755AB300E39F41 /* ImageLoader.swift in Sources */,
+				F96951F22681F3F300A2236F /* RepositoryApiViewModel.swift in Sources */,
+				F9B73BBD26950916008389E8 /* RepoInfoViewModel.swift in Sources */,
 				F914F58F26756E6D00E39F41 /* Colors.swift in Sources */,
 				F914F587267513CB00E39F41 /* ApiRequest.swift in Sources */,
 				F9621A442676B33600D4DE6F /* RepositoryList.swift in Sources */,

@@ -9,14 +9,7 @@ import SwiftUI
 
 struct RepoInfo: View {
   let repository: Repository
-  
-  @State private var issues: [Issue] = []
-  @State private var isLoading = true
-  @State private var actualPage = 1
-  
-  @State private var showingAlert = false
-  @State private var AlertTitle = ""
-  @State private var AlertText = ""
+  @ObservedObject var repoInfoViewModel: RepoInfoViewModel
   
   var body: some View {
     ScrollView {
@@ -37,89 +30,65 @@ struct RepoInfo: View {
           .fontWeight(.heavy)
         
         VStack(spacing: 10) {
-          Text("Language \(repository.language)")
-            .font(.title3)
-            .fontWeight(.heavy)
-          
-          Text("\(repository.subscribers_count) subscribers")
-            .font(.title3)
-            .fontWeight(.heavy)
-          
-          Text("\(repository.forks) forks")
-            .font(.title3)
-            .fontWeight(.heavy)
-          
-          HStack {
-            Text("Issues (\(repository.open_issues_count))")
-              .font(.title3)
-              .fontWeight(.heavy)
-            Spacer()
-          }.padding()
-          
+          repoInfo()
           handleShowIssues()
           handleShowLoadMore()
         }
       }
       Spacer()
     }
-    .onAppear{handleLoadIssues(page: actualPage)}
-    .alert(isPresented: $showingAlert) {
-      Alert(title: Text(AlertTitle), message: Text(AlertText), dismissButton: .default(Text("OK")))
+    .onAppear{repoInfoViewModel.handleLoadIssues(repository: repository)}
+    .alert(isPresented: $repoInfoViewModel.showingAlert) {
+      Alert(title: Text(repoInfoViewModel.alertTitle), message: Text(repoInfoViewModel.alertText), dismissButton: .default(Text("OK")))
     }
   }
   
-  func handleShowLoadMore() -> some View {
-    if issues.count > 0 && issues.count != repository.open_issues_count {
-      return AnyView(
-        Button {
-          if !isLoading {
-            handleLoadIssues(page: actualPage)
-          }
-        } label: {
-          Text("Load more")
-            .padding()
+  @ViewBuilder func repoInfo() -> some View {
+    let arr = [
+      "Language \(repository.language)",
+      "\(repository.subscribers_count) subscribers",
+      "\(repository.forks) forks",
+    ]
+    
+    ForEach(0 ..< 3) { index in
+      Text(arr[index])
+        .font(.title3)
+        .fontWeight(.heavy)
+    }
+    
+    HStack {
+      Text("Issues (\(repository.open_issues_count))")
+        .font(.title3)
+        .fontWeight(.heavy)
+      Spacer()
+    }.padding()
+  }
+  
+  @ViewBuilder func handleShowLoadMore() -> some View {
+    if repoInfoViewModel.issues.count > 0 && repoInfoViewModel.issues.count != repository.open_issues_count && !repoInfoViewModel.isLoading {
+      Button {
+        if !repoInfoViewModel.isLoading {
+          repoInfoViewModel.handleLoadIssues(repository: repository)
         }
-      )
-    }
-    
-    return AnyView(Text(""))
-  }
-  
-  func handleShowIssues() -> some View {
-    if isLoading {
-      return AnyView(ProgressView())
-    }
-    
-    if issues.count == 0 {
-      return AnyView(
-        Text("There is no issues.")
-          .foregroundColor(.red)
-          .bold()
-      )
-    }
-    
-    return AnyView(IssuesList(issues: issues))
-  }
-  
-  func handleLoadIssues(page: Int) {
-    let query = repository.full_name + "/issues?page=\(page)"
-    
-    IssueApi().getIssues(query) { newIssues in
-      if case .success(let repoIssues) = newIssues {
-        self.issues.append(contentsOf: repoIssues)
-      } else {
-        showingAlert = true
-        AlertText = "Ocorreu um erro ao consultar o GitHub, tente novamente."
-        AlertTitle = "Erro"
+      } label: {
+        Text("Load more")
+          .padding()
       }
-    } typeErro: { erro in
-      showingAlert = true
-      AlertText = erro
-      AlertTitle = "Erro"
+    } else if repoInfoViewModel.isLoading && repoInfoViewModel.issues.count > 0 {
+      ProgressView()
     }
-    
-    isLoading = false
-    actualPage += 1
+  }
+  
+  @ViewBuilder func handleShowIssues() -> some View {
+    if repoInfoViewModel.isLoading && repoInfoViewModel.issues.count == 0 {
+      ProgressView()
+    } else if repoInfoViewModel.issues.count == 0 {
+      Text("There is no issues.")
+        .foregroundColor(.red)
+        .bold()
+    } else {
+      IssuesList(issues: repoInfoViewModel.issues)
+    }
   }
 }
 
@@ -137,6 +106,6 @@ struct RepoInfo_Previews: PreviewProvider {
       subscribers_count: 456
     )
     
-    RepoInfo(repository: repository)
+    RepoInfo(repository: repository, repoInfoViewModel: RepoInfoViewModel())
   }
 }
